@@ -1,0 +1,136 @@
+#use SLURM array to run fastqc, kraken2, and bracken to quality control, organize the data using the kraken2 database and make the data usable in RStudio using bracken
+
+#!/bin/bash
+#SBATCH --job-name=sra_fastqc_kraken_bracken
+#SBATCH --account=def-heylanda
+#SBATCH --time=06:00:00
+#SBATCH --cpus-per-task=8
+#SBATCH --mem=32G
+#SBATCH --array=0-5
+#SBATCH --output=qc_kraken_bracken_%A_%a.log
+#SBATCH --error=qc_kraken_bracken_%A_%a.log
+
+module load sra-toolkit
+module load fastqc
+module load kraken2
+module load bracken
+
+############################################
+# 0. PREPARE SCRATCH ENVIRONMENT
+############################################
+
+echo "SLURM_TMPDIR is: $SLURM_TMPDIR"
+echo "Copying SRA list into scratch..."
+
+# Copy your SRA list from persistent scratch into node-local scratch
+cp /scratch/ehoover/metagenome_URLs.txt $SLURM_TMPDIR/
+
+# Verify it exists
+
+if [[ ! -f $SLURM_TMPDIR/metagenome_URLs.txt ]]; then
+    echo "ERROR: SRA list not found in \$SLURM_TMPDIR"
+    exit 1
+fi
+
+# Set path to SRA list inside scratch
+SRA_LIST=$SLURM_TMPDIR/metagenome_URLs.txt
+
+############################################
+# 1. FORCE SRA TOOLKIT TO USE SCRATCH
+############################################
+
+export NCBI_SETTINGS=$SLURM_TMPDIR/ncbi_config.mkfg
+mkdir -p $SLURM_TMPDIR/ncbi_cache
+mkdir -p $SLURM_TMPDIR/ncbi_config
+
+# Configure SRA Toolkit to use scratch instead of $HOME
+vdb-config --set /repository/user/main/public/root="$SLURM_TMPDIR/ncbi_cache"
+
+############################################
+# 2. SELECT ACCESSION FOR THIS ARRAY TASK
+############################################
+
+ACC=$(sed -n "$((SLURM_ARRAY_TASK_ID+1))p" "$SRA_LIST")
+
+if [[ -z "$ACC" ]]; then
+    echo "ERROR: No accession found for array index $SLURM_ARRAY_TASK_ID"
+    exit 1
+fi
+
+echo "Processing accession: $ACC"
+echo "Job started at: $(date)"
+
+############################################
+# 3. VALIDATE KRAKEN2 DATABASE
+############################################
+
+KRAKEN_DB=/project/def-heylanda/ehoover/kraken2_db
+
+echo "Checking Kraken2 DB at: $KRAKEN_DB"
+
+if [[ ! -f "$KRAKEN_DB/hash.k2d" || ! -f "$KRAKEN_DB/opts.k2d" || ! -f "$KRAKEN_DB/taxo.k2d" ]]; then
+    echo "ERROR: Kraken2 database is missing required files."
+    echo "Expected files: hash.k2d, opts.k2d, taxo.k2d"
+    exit 1
+fi
+
+############################################
+# 4. FASTQC STEP (paired-end)
+############################################
+
+TMP_FASTQ_1="$SLURM_TMPDIR/${ACC}_1.fastq"
+TMP_FASTQ_2="$SLURM_TMPDIR/${ACC}_2.fastq"
+
+echo "Downloading FASTQ to scratch..."
+fasterq-dump "$ACC" --threads $SLURM_CPUS_PER_TASK --outdir "$SLURM_TMPDIR"
+
+# Check for paired-end files
+if [[ ! -f "$TMP_FASTQ_1" || ! -f "$TMP_FASTQ_2" ]]; then
+    echo "ERROR: Paired-end FASTQ files not created for $ACC"
+    ls -l $SLURM_TMPDIR
+    exit 1
+fi
+
+echo "Running FastQC on paired-end reads..."
+fastqc "$TMP_FASTQ_1" "$TMP_FASTQ_2" --threads $SLURM_CPUS_PER_TASK --outdir $SLURM_TMPDIR
+
+############################################
+# 5. KRAKEN2 STEP (paired-end)
+############################################
+
+KRAKEN_REPORT="$SLURM_TMPDIR/kraken_report_${ACC}.txt"
+
+echo "Running Kraken2 in paired-end mode..."
+kraken2 \
+  --db "$KRAKEN_DB" \
+ --threads $SLURM_CPUS_PER_TASK \
+  --paired "$TMP_FASTQ_1" "$TMP_FASTQ_2" \
+  --report "$KRAKEN_REPORT" \
+  --output /dev/null
+
+############################################
+# 6. BRACKEN STEP
+############################################
+
+BRACKEN_OUT="$SLURM_TMPDIR/bracken_${ACC}.txt"
+
+echo "Running Bracken..."
+bracken \
+  -d "$KRAKEN_DB" \
+  -i "$KRAKEN_REPORT" \
+  -o "$BRACKEN_OUT" \
+  -r 150 \
+  -l F
+
+############################################
+# 7. COPY RESULTS BACK TO PROJECT SPACE
+############################################
+
+OUTDIR=/project/def-heylanda/ehoover/BINF-6110-Assignment-3/results
+mkdir -p $OUTDIR
+
+echo "Copying results to $OUTDIR"
+cp $SLURM_TMPDIR/*${ACC}* $OUTDIR/
+
+echo "Finished at: $(date)"
+
