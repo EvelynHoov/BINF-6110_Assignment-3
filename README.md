@@ -16,7 +16,7 @@ Comparison of gut microbiota between individuals maintaining vegan and omnivorou
 ## Differential abundance of species
 ALDEx3 (ALDEx3 v1.0.2) will be used to run a differential abundance analysis on the data to determine differences in species abundance between the groups. 
 ## Plots
-GGplot2 (ggplot2 v4.0.2) will be used to form the plots displayed in this project.  \
+GGplot2 (ggplot2 v4.0.2) will be used to form the plots displayed in this project.  
 # Results  
   Based on the analyses performed in this project, there is a great amount of taxonomic abundance and diversity between the groups, but significantly more so within the groups. For instance, when focusing on the taxonomic abundance of the top 20 species observed among the samples, one sample from each group has a significantly higher abundance of _Segatella copri_ compared to the rest of the samples (Figure 1). However, the samples from the vegan group appear to have a generally more levelled abundance than the omnivore group samples.
   When considering the alpha diversity metrics, richness as determined by the Chao1 test appears to be more stable across all species in the vegan group, and less stable in the omnivorous group (Figure 2). However, evenness as determined by the Berger-Parker test demonstrates that one sample is significantly less even in each group than the rest of the samples and that evenness within the group is very similar across both groups (Figure 3). These uneven samples are likely the same samples observed to have high abundances of _Segatella copri_ in Figure 1. The Shannon diversity index shares these trends (Figure 4).
