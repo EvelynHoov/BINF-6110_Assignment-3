@@ -45,13 +45,21 @@ GGplot2 (ggplot2 v4.0.2) will be used to form the plots displayed in this projec
 In general, the results of this project demonstrate that there is no true significant difference between the groups in how they influence the diversity of gut microbes. However, the results of this analysis allow us to analyse the methods used in this project and the general taxa that can be observed in the gut microbiome. For instance, _Sagetella copri_ was highly abundant in two of the samples and is generally known to be found in gut microbiomes, specifically those of males with strong cardiometabolic health (Blanco-Míguez et al., 2023). However, _Methyloceanibacter caenitepidi_ is observed to be a thermophilic bacterium found near marine hydrothermal vents, not human digestive systems (Takeuchi et al., 2014). This trend highlights the false positives which are likely to occur when using kraken2 for taxonomic classification of reads, depsite the obvious benefits of the software. Other observed species, such as _Ottowia sp._ and _Corynebacterium stationis_ are both observed and expected in this study, and as such support kraken2 and the other software used in this project (Spring et al., 2004; BacDive, n.d.). All in all, despite providing useful analysis of the tools used in this project, it failed to determine diet-dependent differences in microbiome structure. Future studies that look to further the findings of this project should seek to expand the sample size used in their projects which may help in determining significant differences between diet groups.
 # References
 BacDive. (n.d.). Corynebacterium Stationis (DSM 20305, ATCC 6872, IAM 1645). https://bacdive.dsmz.de/strain/3079  
-Blanco-Míguez, A., Gálvez, E. J. C., Pasolli, E., De Filippis, F., Amend, L., Huang, K. D., Manghi, P., Lesker, T.-R., Riedel, T., Cova, L., Punčochář, M., Thomas, A. M., Valles-
-Chaumeil, P.-A., Mussig, A.J., Hugenholtz, P., Parks, D.H. (2022). GTDB-Tk v2: memory friendly classification with the genome taxonomy database, Bioinformatics 3(23):1, 5315–5316, https://doi.org/10.1093/bioinformatics/btac672.  
-Colomer, M., Schober, I., Hitch, T. C. A., Clavel, T., Berry, S. E., Davies, R., Wolf, J., … Strowig, T. (2023). Extension of the segatella copri complex to 13 species with distinct large extrachromosomal elements and associations with host conditions. Cell Host &amp; Microbe, 31(11). https://doi.org/10.1016/j.chom.2023.09.013  
+\
+Blanco-Míguez, A., Gálvez, E. J. C., Pasolli, E., De Filippis, F., Amend, L., Huang, K. D., Manghi, P., Lesker, T.-R., Riedel, T., Cova, L., Punčochář, M., Thomas, A. M., Valles-Colomer, M., Schober, I., Hitch, T. C. A., Clavel, T., Berry, S. E., Davies, R., Wolf, J., … Strowig, T. (2023). Extension of the segatella copri complex to 13 species with distinct large extrachromosomal elements and associations with host conditions. Cell Host &amp; Microbe, 31(11). https://doi.org/10.1016/j.chom.2023.09.013  
+\
 De Filippis et al. (2019). Distinct Genetic and Functional Traits of Human Intestinal Prevotella copri Strains Are Associated with Different Habitual Diets. Cell Host & Microbe, 25(3), 444-453.  
+\
+Chaumeil, P.-A., Mussig, A.J., Hugenholtz, P., Parks, D.H. (2022). GTDB-Tk v2: memory friendly classification with the genome taxonomy database, Bioinformatics 3(23):1, 5315–5316, https://doi.org/10.1093/bioinformatics/btac672.  
+\
 jsilve24. (n.d.). JSILVE24/ALDEX3. GitHub. https://github.com/jsilve24/ALDEx3  
+\
 Lu, J. et al. (2022). Metagenome analysis using the Kraken software suite. Nat Protoc 17, 2815–2839 (2022). https://doi.org/10.1038/s41596-022-00738-y.  
-Singh, R.K., et al. (2017). Influence of diet on the gut microbiome and implications for human health. NIH, 15(1):73. doi: 10.1186/s12967-017-1175-y.
+\
+Singh, R.K., et al. (2017). Influence of diet on the gut microbiome and implications for human health. NIH, 15(1):73. doi: 10.1186/s12967-017-1175-y.  
+\
 Spring, S., Jäckel, U., Wagner, M., & Kämpfer, P. (2004). Ottowia thiooxydans gen. nov., sp. nov., a novel facultatively anaerobic, N2O-producing bacterium isolated from activated sludge, and transfer of Aquaspirillum gracile to Hylemonella gracilis gen. nov., comb. Nov.. International Journal of Systematic and Evolutionary Microbiology, 54(1), 99–106. https://doi.org/10.1099/ijs.0.02727-0  
+\
 Takeuchi, M., Katayama, T., Yamagishi, T., Hanada, S., Tamaki, H., Kamagata, Y., Oshima, K., Hattori, M., Marumo, K., Nedachi, M., Maeda, H., Suwa, Y., & Sakata, S. (2014). Methyloceanibacter Caenitepidi gen. Nov., sp. nov., a facultatively methylotrophic bacterium isolated from marine sediments near a hydrothermal vent. International Journal of Systematic and Evolutionary Microbiology, 64(Pt_2), 462–468. https://doi.org/10.1099/ijs.0.053397-0  
+\
 Wood, D. (n.d.). Manual. GitHub. https://github.com/DerrickWood/kraken2/wiki/Manual#kraken-2-databases  
